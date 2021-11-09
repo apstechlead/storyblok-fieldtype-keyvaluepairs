@@ -3,7 +3,7 @@
 A Storyblok Field-Type Plugin for creating a Key-Value pair array.
 
 Screenshot:
-![preview screenshot](https://github.com/apstechlead/storyblok-fieldtype-keyvaluepairs/blob/master/media/image.jpg?raw=true)
+![preview screenshot](https://github.com/apstechlead/storyblok-fieldtype-keyvaluepairs/blob/master/media/preview-01.jpg?raw=true)
 
 ## Project setup
 ```
