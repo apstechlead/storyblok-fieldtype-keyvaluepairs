@@ -1,20 +1,45 @@
 <template>
   <div>
-    Google snippet preview:
-    <div class="p-metatags__preview">
-      <div class="p-metatags__google-title">{{ model.title || 'Your title' }}</div>
-      <div class="p-metatags__google-link">yoursite.com/example</div>
-      <div class="p-metatags__google-description">{{ model.description || 'Your description' }}</div>
-    </div>
-    <div class="uk-form-row">
-      <label>Meta Title</label>
-      <input type="text" placeholder="Your title" v-model="model.title" class="uk-width-1-1">
-    </div>
+    <div class="List">
+      <div v-for="(item, index) in model.items" :key="index" class="uk-flex">
+        <input
+          v-model="model.items[index].key"
+          placeholder="Name"
+          class="input-group__field"
+          ref="input"
+        />
 
-    <div class="uk-form-row">
-      <label>Meta description</label>
-      <textarea rows="4" placeholder="Your description" v-model="model.description" class="uk-width-1-1"></textarea>
+        <input
+          v-model="model.items[index].value"
+          placeholder="Value"
+          class="input-group__field"
+          @keydown.tab="addItem"
+        />
+
+        <div>
+          <i
+            class="input-group__item schema__trash uk-icon-chevron-up"
+            :style="{ opacity: index > 0 ? 1 : 0 }"
+            @click="moveUp(index)"
+          ></i>
+          <i
+            class="input-group__item schema__trash uk-icon-chevron-down"
+            :style="{ opacity: index < model.items.length - 1 ? 1 : 0 }"
+            @click="moveDown(index)"
+          ></i>
+          <i
+            class="input-group__item schema__trash uk-icon-trash"
+            @click="removeItem(index)"
+        ></i>
+        </div>
+      </div>
     </div>
+    <a
+      class="uk-button uk-button-primary uk-button-small uk-margin-top"
+      @click="addItem"
+    >
+      <i class="uk-icon-plus"></i> Add
+    </a>
   </div>
 </template>
 
@@ -24,42 +49,66 @@ export default {
   methods: {
     initWith() {
       return {
-        // needs to be equal to your storyblok plugin name
-        plugin: 'my-plugin-name',
-        title: '',
-        description: ''
-      }
+        plugin: "keyvaluepair-array",
+        items: [
+          {
+            key: "",
+            value: "",
+          },
+        ],
+      };
     },
     pluginCreated() {
       // eslint-disable-next-line
-      console.log('View source and customize: https://github.com/storyblok/storyblok-fieldtype')
-    }
+    },
+    addItem() {
+      this.model.items.push({ key: "", value: "" });
+      setTimeout(() => {
+        const input = this.$refs.input[this.$refs.input.length - 1];
+        input && input.focus();
+      }, 50);
+    },
+    removeItem(index) {
+        this.model.items.splice(index, 1);
+    },
+    moveDown(index) {
+      if (index >= this.model.items.length - 1) {
+        return;
+      }
+      this.model.items.splice(
+        index,
+        2,
+        this.model.items[index + 1],
+        this.model.items[index]
+      );
+    },
+    moveUp(index) {
+      if (index <= 0) {
+        return;
+      }
+      this.model.items.splice(
+        index - 1,
+        2,
+        this.model.items[index],
+        this.model.items[index - 1]
+      );
+    },
   },
   watch: {
-    'model': {
+    model: {
       handler: function (value) {
-        this.$emit('changed-model', value);
+        this.$emit("changed-model", value);
       },
-      deep: true
-    }
-  }
-}
+      deep: true,
+    },
+  },
+};
 </script>
 
 <style>
-  .p-metatags__google-title {
-    color: blue;
-    text-decoration: underline;
-  }
-
-  .p-metatags__google-link {
-    color: green;
-  }
-
-  .p-metatags__preview {
-    margin: 5px 0 15px;
-    padding: 10px;
-    color: #000;
-    background: #FFF;
-  }
+.List {
+  row-gap: 8px;
+  display: flex;
+  flex-direction: column;
+}
 </style>

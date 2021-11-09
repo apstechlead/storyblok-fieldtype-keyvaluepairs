@@ -1,6 +1,9 @@
 # Storyblok Field-Type
 
-> A Storyblok Field-Type Plugin Starter Project
+A Storyblok Field-Type Plugin for creating a Key-Value pair array.
+
+Screenshot:
+![preview screenshot](https://github.com/apstechlead/storyblok-fieldtype-keyvaluepairs/blob/master/media/image.jpg?raw=true)
 
 ## Project setup
 ```
